@@ -1,4 +1,12 @@
 cmake_minimum_required(VERSION 3.1)
+set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0")
+#set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0\\libs")
+set(Boost_USE_STATIC_LIBS ON)
+set(Boost_DEBUG ON)
+
+#find_package (Boost 1.76.0 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
 
 if(NOT CMAKE_VERSION VERSION_LESS "3.3")
     # Don't ignore visibility related properties for non-SHARED targets
@@ -12,6 +20,8 @@ if (NOT CMAKE_VERSION VERSION_LESS "3.13")
 endif()
 
 project(Cucumber-Cpp)
+#set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
+set(BOOST_INCLUDE_DIRS C:\\Program Files\\boost\\boost_1_76_0\\libs)
 
 option(BUILD_SHARED_LIBS        "Generate shared libraries" OFF)
 option(CUKE_USE_STATIC_BOOST    "Statically link Boost (except boost::test)" ${WIN32})

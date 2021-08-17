@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
-set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0")
+#set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0")
 #set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0\\libs")
-set(Boost_USE_STATIC_LIBS ON)
+#set(Boost_USE_STATIC_LIBS ON)
+
+enable_testing()
 set(Boost_DEBUG ON)
-
-#find_package (Boost 1.76.0 REQUIRED COMPONENTS unit_test_framework)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-
 
 if(NOT CMAKE_VERSION VERSION_LESS "3.3")
     # Don't ignore visibility related properties for non-SHARED targets
@@ -20,16 +18,21 @@ if (NOT CMAKE_VERSION VERSION_LESS "3.13")
 endif()
 
 project(Cucumber-Cpp)
-#set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
-set(BOOST_INCLUDE_DIRS C:\\Program Files\\boost\\boost_1_76_0\\libs)
+set(BOOST_INCLUDE_DIRS $boost_installation_prefix/include)
+#set(Boost_INCLUDE_DIR ${_VCPKG_INSTALLED_DIR}/x64-windows-static/include)
+set(Boost_USE_STATIC_LIBS ON)
+find_package (Boost 1.76.0 COMPONENTS thread system date_time program_options filesystem REQUIRED)
+include_directories(../src)
+
+#set(BOOST_INCLUDE_DIRS C:\\Program Files\\boost\\boost_1_76_0\\libs)
 
 option(BUILD_SHARED_LIBS        "Generate shared libraries" OFF)
 option(CUKE_USE_STATIC_BOOST    "Statically link Boost (except boost::test)" ${WIN32})
 option(CUKE_USE_STATIC_GTEST    "Statically link Google Test" ON)
 option(CUKE_ENABLE_BOOST_TEST   "Enable Boost.Test framework" ON)
 option(CUKE_ENABLE_EXAMPLES     "Build examples" OFF)
-option(CUKE_ENABLE_GTEST        "Enable Google Test framework" ON)
-option(CUKE_ENABLE_QT           "Enable Qt framework" ON)
+option(CUKE_ENABLE_GTEST        "Enable Google Test framework" OFF)
+option(CUKE_ENABLE_QT           "Enable Qt framework" OFF)
 option(CUKE_TESTS_E2E           "Enable end-to-end tests" ON)
 option(CUKE_TESTS_UNIT          "Enable unit tests" ON)
 option(CUKE_TESTS_VALGRIND      "Enable tests within Valgrind" OFF)

@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.1)
 #set(BOOST_ROOT "C:\\Program Files\\boost\\boost_1_76_0\\libs")
 #set(Boost_USE_STATIC_LIBS ON)
 
-enable_testing()
+#enable_testing()
+#cmake -E chdir build cmake -DVCPKG_TARGET_TRIPLET="x86-windows" -DCMAKE_TOOLCHAIN_FILE="C:/Pandu/GitHub/vcpkg/scripts/buildsystems/vcpkg.cmake" -DBoost_USE_STATIC_LIBS=ON -DCUKE_ENABLE_EXAMPLES=on  ..
 set(Boost_DEBUG ON)
 
 if(NOT CMAKE_VERSION VERSION_LESS "3.3")

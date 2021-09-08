@@ -6,9 +6,9 @@ name: CucumberTest
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ main, cucumber-cpp ]
+    branches: [ main, cucumber-build-patch-1, cucumber-cpp ]
   pull_request:
-    branches: [ main, cucumber-cpp ]
+    branches: [ main, cucumber-build-patch-1, cucumber-cpp ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:

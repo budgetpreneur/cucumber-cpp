@@ -1,0 +1,97 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CucumberTest
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ cucumber-cpp ]
+  pull_request:
+    branches: [ cucumber-cpp ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+    
+    env:
+      BOOST_ROOT: C:\vcpkg\installed\x86-windows\
+      BOOST_LIBRARYDIR: C:\vcpkg\installed\x86-windows\lib\
+      BOOST_INCLUDEDIR: C:\vcpkg\installed\x86-windows\include\boost\
+      CMAKE_GENERATOR: 'NMake Makefiles'
+      QT_DIR: C:\Qt\5.8\msvc2015
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      
+      - name: Set up Ruby 2.7
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+          architecture: 'x86'
+        
+      - name: Add msbuild to PATH (include NuGet, vcpkg)
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Install packages and dependencies
+        run: |
+          bootstrap-vcpkg
+          vcpkg install boost-test
+          vcpkg install boost-test:x86-windows-static
+          vcpkg install boost-system
+          vcpkg install boost-thread
+          vcpkg install boost-filesystem
+          vcpkg install boost-program-options
+          vcpkg install boost-date-time
+          vcpkg install boost-program-options
+          vcpkg install boost-multi-array
+          vcpkg install boost-foreach
+          vcpkg install boost-asio
+          vcpkg install boost-variant
+          vcpkg install boost-spirit
+          vcpkg install boost-assign
+          vcpkg install boost-bind
+          vcpkg install json-spirit
+          vcpkg install gtest
+          vcpkg install qt5
+          vcpkg install vcpkg-cmake
+          vcpkg install vcpkg-cmake-config
+          
+      - name: install ruby
+        run: |
+          git submodule init
+          git submodule update
+
+      - name: checkout submodule
+        run: |
+          git submodule init
+          git submodule update
+          
+      - name: set path
+        run: set PATH=C:\Ruby27\bin;%BOOST_LIBRARYDIR%;%PATH%
+          
+      - name: install gem bundle
+        run: |
+          gem install bundle
+          bundle install
+          
+      - name: build script
+        run: |
+          cmake -E make_directory build
+          cmake -E chdir build cmake -G "NMake Makefiles" -DBUILD_SHARED_LIBS=ON -DCUKE_ENABLE_EXAMPLES=on -DCMAKE_INSTALL_PREFIX=${prefix} ..
+          cmake --build build
+          
+      - name: test script
+        run: |
+          set CTEST_OUTPUT_ON_FAILURE=ON
+          cmake --build build --target test
+          cmake --build build --target features
+          cmake --build build --target install
